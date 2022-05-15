@@ -19,18 +19,24 @@ let Should_be_Covered_Bomb() =
 
 [<Fact>]
 let Should_be_Number_not_Bomb() =
-    let sut = Number 1
+    let sut = 1 |> Number 
     let ret = sut |> isBomb 
     Assert.False(ret)
 
 [<Fact>]
 let Should_be_Number() =
     let sut = Number 1
-    let ret = sut |> charTo
+    let ret = sut |> char
     Assert.Equal('1', ret)
 
 [<Fact>]
 let Should_be_Number_Add() =
     let sut = Number 1
-    let ret = sut |> addTo |> charTo 
+    let ret = sut |> add |> char 
     Assert.Equal('2', ret)
+
+[<Fact>]
+let Should_be_Number_Click() =
+    let sut = 1 |> Number |> Covered
+    let ret = sut |> click |> char 
+    Assert.Equal('1', ret)

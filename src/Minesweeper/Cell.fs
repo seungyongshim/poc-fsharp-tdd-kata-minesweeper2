@@ -16,16 +16,19 @@ module Cell =
         | Covered x -> isBomb x
         | _ -> false
 
-    let charTo v =
+    let char v =
         match v with
         | Bomb -> '*'
         | Covered _ -> '.'
         | Number n -> Convert.ToChar(n + 48)
 
-    let rec addTo v =
+    let rec add v =
         match v with
-        | Covered x -> addTo x
-        | Number n -> Number (n + 1)
+        | Covered x -> add x
+        | Number n -> n + 1 |> Number 
         | _ -> v
 
-
+    let click v =
+        match v with
+        | Covered x -> x
+        | _ -> v
