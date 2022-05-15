@@ -1,9 +1,13 @@
 namespace Minesweeper
 
+open System
+
 type Cell =
     | Covered of Cell
     | Bomb
-    | Number of uint8
+    | Number of int
+    
+       
 
 module Cell =
     let rec isBomb v =
@@ -12,5 +16,10 @@ module Cell =
         | Covered x -> isBomb x
         | _ -> false
 
-    let hello name =
-        printfn "Hello %s" name
+    let charOf v =
+        match v with
+        | Bomb -> '*'
+        | Covered _ -> '.'
+        | Number n -> Convert.ToChar(n + 48)
+
+
