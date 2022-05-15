@@ -16,10 +16,16 @@ module Cell =
         | Covered x -> isBomb x
         | _ -> false
 
-    let charOf v =
+    let charTo v =
         match v with
         | Bomb -> '*'
         | Covered _ -> '.'
         | Number n -> Convert.ToChar(n + 48)
+
+    let rec addTo v =
+        match v with
+        | Covered x -> addTo x
+        | Number n -> Number (n + 1)
+        | _ -> v
 
 
