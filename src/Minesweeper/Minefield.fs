@@ -6,26 +6,51 @@ type Minefield =
     | Setup of width:int * height:int
     | SetupWithBombPos of width:int * height:int * seq<int * int>
     | Playing of width:int * height:int * Map<int * int, Cell>
+    | Win of width:int * height:int * Map<int * int, Cell>
+    | Loose of width:int * height:int * Map<int * int, Cell>
 
 module Minefield =
+    let ifWin v =
+        match v with
+        | Playing (w, h, z) ->
+            let isWin = z |> Map.filter (fun x y -> match y with
+                                                    | Covered(Number _) -> true
+                                                    | _ -> false)
+                          |> Map.count 
+            match isWin with
+            | 0 -> Win(w, h, z)
+            | _ -> v
+        | _ -> v
+
     let getCells v =
         match v with
         | Playing (w, h, z) -> z
         | _ -> Map.empty
 
-    let click p v =
-        let map = Option.map
-        let mapClick = map Cell.click
-        let q z =
-            match z.Item p with
-            | Covered _ ->
-                let clicked = z |> Map.change p mapClick
-                match clicked.Item p with
-                | Number 0 -> clicked 
-                | _ -> clicked
-            | _ -> z
+    let rec click p v =
         match v with
-        | Playing (w, h, z) -> Playing (w, h, q z)
+        | Playing (w, h, z) ->
+            let map = Option.map
+            let mapClick = map Cell.click
+            match Map.tryFind p z with
+            | Some(Covered _) ->
+                let clicked = z |> Map.change p mapClick
+                match Map.tryFind p clicked with
+                | Some(Bomb) -> Loose(w, h, clicked)
+                | Some(Number 0) ->
+                    let (+) a b = (fst(a) + fst(b), snd(a) + snd(b))
+                    Playing(w, h, clicked) |> click (p + (-1, -1))
+                                           |> click (p + (-1, 0))
+                                           |> click (p + (-1, 1))
+                                           |> click (p + (0, -1))
+                                           |> click (p + (0, 1))
+                                           |> click (p + (1, -1))
+                                           |> click (p + (1, 0))
+                                           |> click (p + (1, 1))
+                                           |> ifWin
+                | _ -> Playing(w, h, clicked)
+            | _ -> v
+        | _ -> v
 
     let rec start v =
         match v with

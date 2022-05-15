@@ -19,3 +19,27 @@ let Should_be_Create_With_Bombs() =
                   |> Map.filter(fun x v -> v |> Cell.isBomb)
                   |> Map.count
     Assert.Equal(2, ret)
+
+[<Fact>]
+let Should_be_click_on_bomb() =
+    let sut = SetupWithBombPos(3, 3, seq{(0, 0)}) |> start
+    let ret = sut |> click (0, 0)
+    Assert.True(match ret with
+                | Loose _ -> true
+                | _ -> false)
+
+[<Fact>]
+let Should_be_click_on_zero() =
+    let sut = SetupWithBombPos(3, 3, seq{(2, 2)}) |> start
+    let ret = sut |> click (0, 0)
+    Assert.True(match ret with
+                | Win _ -> true
+                | _ -> false)
+
+[<Fact>]
+let Should_be_click_on_zero1() =
+    let sut = SetupWithBombPos(3, 3, seq{(2, 1); (1, 2)}) |> start
+    let ret = sut |> click (0, 0)
+    Assert.True(match ret with
+                | Playing _ -> true
+                | _ -> false)
