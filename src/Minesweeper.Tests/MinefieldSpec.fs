@@ -15,8 +15,7 @@ let Should_be_Create() =
 [<Fact>]
 let Should_be_Create_With_Bombs() =
     let sut = SetupWithBombPos(3, 3, seq{(0, 0); (1,0)}) |> start
-    let ret = sut |>
-              getCells |>
-              Map.filter(fun x -> fun v -> v |> Cell.isBomb) |>
-              Map.count
+    let ret = sut |> getCells
+                  |> Map.filter(fun x v -> v |> Cell.isBomb)
+                  |> Map.count
     Assert.Equal(2, ret)
