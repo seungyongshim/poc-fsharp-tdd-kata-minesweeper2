@@ -1,5 +1,7 @@
 namespace Minesweeper
 
+open System
+
 type Minefield =
     | Setup of width:int * height:int
     | SetupWithBombPos of width:int * height:int * seq<int * int>
@@ -14,15 +16,24 @@ module Minefield =
     let rec start v =
         match v with
         | Setup (w, h) -> Playing (w, h, query {
-            for y in 0..h - 1  do
+            for y in 0..h - 1 do
             for x in 0..w - 1 do
             select ((y, x), 0 |> Number |> Covered)
         } |> Map.ofSeq)
         | SetupWithBombPos (w, h, z) ->
-            let playing = Setup (w, h) |> start
-            let cells = playing |> getCells
+            let cells = Setup (w, h) |> start |> getCells
+            let (+) a b = (fst(a) + fst(b), snd(a) + snd(b))
             let cellsWithBombs = (cells, z) ||> Seq.fold (fun acc key ->
-                Map.change key (fun x -> Some(Covered Bomb)) acc 
+                let mapAdd = Option.map Cell.add
+                acc |> Map.change key (Option.map (fun i -> Covered Bomb))
+                    |> Map.change (key + (-1, -1)) mapAdd
+                    |> Map.change (key + (-1,  0)) mapAdd
+                    |> Map.change (key + (-1,  1)) mapAdd
+                    |> Map.change (key + ( 0, -1)) mapAdd
+                    |> Map.change (key + ( 0,  1)) mapAdd
+                    |> Map.change (key + ( 1, -1)) mapAdd
+                    |> Map.change (key + ( 1,  0)) mapAdd
+                    |> Map.change (key + ( 1,  1)) mapAdd
             )
             Playing(w, h, cellsWithBombs)
         | _ -> v

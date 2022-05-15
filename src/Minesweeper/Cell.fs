@@ -7,8 +7,6 @@ type Cell =
     | Bomb
     | Number of int
     
-       
-
 module Cell =
     let rec isBomb v =
         match v with
@@ -24,7 +22,7 @@ module Cell =
 
     let rec add v =
         match v with
-        | Covered x -> add x
+        | Covered x -> add x |> Covered
         | Number n -> n + 1 |> Number 
         | _ -> v
 
