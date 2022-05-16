@@ -46,7 +46,7 @@ module Minefield =
                                            |> click (p + (1, 0))
                                            |> click (p + (1, 1))
                                            |> ifWin
-                | _ -> Playing(w, h, clicked)
+                | _ -> Playing(w, h, clicked) |> ifWin
             | _ -> v
         | _ -> v
 
