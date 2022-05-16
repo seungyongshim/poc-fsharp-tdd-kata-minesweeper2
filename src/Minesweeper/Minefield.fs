@@ -21,8 +21,7 @@ module Minefield =
             | _ -> v
         | _ -> v
 
-    let getCells v =
-        match v with
+    let getCells = function
         | Playing (w, h, z) -> z
         | _ -> Map.empty
 
@@ -77,9 +76,7 @@ module Minefield =
             Playing(w, h, cellsWithBombs)
         | _ -> v
 
-    let count v =
-        let count = Map.count
-        match v with
-        | Playing (w, h, z) -> z |> count
+    let count  = function
+        | Playing (w, h, z) -> z |> Map.count
         | _ -> 0
    
