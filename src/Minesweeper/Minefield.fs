@@ -13,9 +13,10 @@ module Minefield =
     let ifWin v =
         match v with
         | Playing (w, h, z) ->
-            let isNotWin = z |> Map.exists (fun x y -> match y with
-                                                       | Covered(Number _) -> true
-                                                       | _ -> false)
+            let isNotWin = z |> Map.exists (fun x y ->
+                match y with
+                | Covered(Number _) -> true
+                | _ -> false)
             match isNotWin with
             | false -> Win(w, h, z)
             | _ -> v
@@ -79,4 +80,3 @@ module Minefield =
     let count  = function
         | Playing (w, h, z) -> z |> Map.count
         | _ -> 0
-   
