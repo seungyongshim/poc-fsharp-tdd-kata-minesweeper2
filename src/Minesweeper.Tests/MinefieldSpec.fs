@@ -39,7 +39,6 @@ let Should_be_click_on_zero() =
 [<Fact>]
 let Should_be_click_on_zero1() =
     let sut = SetupWithBombPos(3, 3, seq{(2, 1); (1, 2)}) |> start
-    let ret = sut |> click (0, 0)
-    Assert.True(match ret with
-                | Playing _ -> true
-                | _ -> false)
+    let ret = sut |> click (0, 0) |> string
+    
+    Assert.Equal("01.\r\n12.\r\n...\r\n", ret);
