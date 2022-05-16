@@ -1,6 +1,7 @@
 namespace Minesweeper
 
 open System
+open System.Text
 
 type Minefield =
     | Setup of width:int * height:int
@@ -10,6 +11,19 @@ type Minefield =
     | Loose of width:int * height:int * Map<int * int, Cell>
 
 module Minefield =
+    let string v =
+        match v with
+        | Win _ -> "Win"
+        | Loose _ -> "Loose"
+        | Playing (w, _, z) ->
+            let sb = (StringBuilder(), z) ||> Map.fold(fun s (y, x) z ->
+                let _1 = s.Append(z |> Cell.char)
+                match x with
+                | _ when x = w - 1 -> _1.AppendLine()
+                | _ -> _1)
+            sb.ToString()
+        | _ -> String.Empty
+
     let ifWin v =
         match v with
         | Playing (w, h, z) ->
