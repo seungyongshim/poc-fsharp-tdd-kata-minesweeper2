@@ -17,10 +17,10 @@ let rec gameloop g =
         g |> string |> Console.WriteLine
         Console.WriteLine()
         "Row : " |> Console.Write
-        let y = Console.ReadLine() |> Convert.ToInt32 
+        let y = Console.ReadLine() |> Convert.ToInt32
         "Col : " |> Console.Write
         let x = Console.ReadLine() |> Convert.ToInt32
-        let n = g |> click (y, x)
+        let n = ((y, x), g) ||> click 
         Console.SetCursorPosition(0, 0)
         gameloop n
     | _ -> g |> string |> Console.WriteLine
