@@ -41,4 +41,4 @@ let Should_be_click_on_zero1() =
     let sut = SetupWithBombPos(3, 3, seq{(2, 1); (1, 2)}) |> start
     let ret = sut |> click (0, 0) |> string
     
-    Assert.Equal("01.\r\n12.\r\n...\r\n", ret);
+    Assert.Equal("0 1 .\n1 2 .\n. . .\n", ret);

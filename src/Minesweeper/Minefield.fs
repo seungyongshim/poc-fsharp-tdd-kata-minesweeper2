@@ -11,17 +11,23 @@ type Minefield =
     | Loose of width:int * height:int * Map<int * int, Cell>
 
 module Minefield =
-    let string v =
-        match v with
-        | Win _ -> "Win"
-        | Loose _ -> "Loose"
-        | Playing (w, _, z) ->
+    let rec string v =
+        let print w z =
             let sb = (StringBuilder(), z) ||> Map.fold(fun s (y, x) z ->
                 let _1 = s.Append(z |> Cell.char)
                 match x with
-                | _ when x = w - 1 -> _1.AppendLine()
-                | _ -> _1)
+                | _ when x = w - 1 -> _1.Append('\n')
+                | _ -> _1.Append(' '))
             sb.ToString()
+        match v with
+        | Win (w, _, z) ->
+            let r = (w, z) ||> print
+            r + "\nWin"
+        | Loose (w, _, z) -> 
+            let r = (w, z) ||> print
+            r + "\nLoose"
+        | Playing (w, _, z) -> (w, z) ||> print
+            
         | _ -> String.Empty
 
     let ifWin v =
