@@ -9,13 +9,16 @@ let setup width height bombs = SetupWithBombPos(width, height,
     |> Seq.distinct
     |> Seq.take bombs)
 
-let game = setup 3 3 3 |> start
+let game = setup 3 3 2 |> start
 
 let rec gameloop g =
     match g with
     | Playing _ -> 
         g |> string |> Console.WriteLine
-        let y = Console.ReadLine() |> Convert.ToInt32
+        Console.WriteLine()
+        "Row : " |> Console.Write
+        let y = Console.ReadLine() |> Convert.ToInt32 
+        "Col : " |> Console.Write
         let x = Console.ReadLine() |> Convert.ToInt32
         let n = g |> click (y, x)
         Console.SetCursorPosition(0, 0)
